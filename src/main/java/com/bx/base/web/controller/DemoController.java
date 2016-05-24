@@ -1,13 +1,11 @@
 package com.bx.base.web.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bx.base.Constants;
 import com.bx.base.util.BaseUtil;
@@ -39,15 +37,16 @@ public class DemoController extends BaseController {
 	/**
 	 * demo
 	 */
+	@ResponseBody
 	@RequestMapping("getInfo")
-	public String getInfo(DemoForm demoForm, HttpServletRequest request, HttpServletResponse response){
+	public Object getInfo(DemoForm demoForm){
 		
  		Integer id = demoForm.getId();
  		
  		//参数检查
 		if(BaseUtil.isEmpty(id)){
-			outPrint(Constants.RETURN_STATE_FAIL, Constants.PARAM_VALIDATE_FAIL, id, response);
-			return null;
+			return printError(Constants.RETURN_STATE_FAIL, Constants.PARAM_VALIDATE_FAIL);
+			
 		}
 		
 		DemoVo result = null;
@@ -57,7 +56,6 @@ public class DemoController extends BaseController {
 			log.error(e.getStackTrace());
 		}
 		
-		outPrint(Constants.RETURN_STATE_SUCCESS, Constants.SYSYTEM_OK, result, response);
-		return null;
+		return printSuccess(result);
 	}
 }
